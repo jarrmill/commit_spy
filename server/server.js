@@ -57,10 +57,28 @@ app.use(cookieSession({
 
 app.get('/login', passport.authenticate('github'));
 
+app.get('/logout', (req, res) => {
+  req.logout();
+  req.session = null;
+  res.redirect('/');
+})
+
 app.get('/login/callback', passport.authenticate('github', { failureRedirect: '/'}), (req, res) => {
   req.session.token = req.user.accessToken;
 
   res.redirect('/');
 });
+
+app.get('/users/repos', function(req, res) {
+  if (req.session.token) {
+    Sessions.getSession(req.session.token)
+    .then((results) => {
+      res.send(`Welcome back ${results.rows[0].name}`);
+    })
+    .catch((err) => {
+      res.send();
+    })
+  }
+})
 
 app.listen(port, () => console.log(`-Server Boot Successful. Running on port ${port}.`));
