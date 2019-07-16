@@ -5,44 +5,41 @@ class RepoManager extends Component {
   constructor() {
     super();
     this.state = {
-      organization: '',
-      repository: '',
+      url: '',
+
     }
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
-
-  onChange(e, target) {
-    this.setState({[target]: e.target.value});
+  cleanUrl(url) {
+    //Split by .com so we don't have to worry about whether the user put https:// or not
+    let urlArr = url.split('.com')[1].split('/');
+    return { organization: urlArr[1], repository: urlArr[2] };
   }
-
+  onChange(e) {
+    this.setState({url: e.target.value});
+  }
+  
   onSubmit(e) {
     e.preventDefault();
-    const { organization, repository} = this.state;
-
+    const { url } = this.state;
+    const { organization, repository } = this.cleanUrl(url);
     this.props.handleSubmit(organization, repository);
 
     this.setState({ organization: '', repository: ''});
   }
 
   render() {
-    const { organization, repository } = this.state;
+    const { url } = this.state;
     return (
       <Form>
         <FormGroup>
-          <Label>Organization</Label>
+          <Label>Add a Repository by Url:</Label>
           <Input type="text"
-                 placeholder="organization name here"
-                 value={organization}
-                 onChange={(e) => this.onChange(e, 'organization')}></Input>
-        </FormGroup>
-        <FormGroup>
-          <Label>Repository</Label>
-          <Input type="text"
-                 placeholder="repository"
-                 value={repository}
-                 onChange={(e) => this.onChange(e, 'repository')}></Input>
+                 placeholder="Paste the URL of the Repo you want to follow"
+                 value={url}
+                 onChange={(e) => this.onChange(e)}></Input>
         </FormGroup>
         <Button onClick={(e) => this.onSubmit(e)}>Add</Button>
       </Form>

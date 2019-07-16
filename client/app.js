@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand, NavItem, NavLink } from 'reactstrap';
 import axios from 'axios';
 import RepoManager from './repo_manager';
 import RepoList from './repo_list';
+import NavBar from './navbar';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
+      username: 'Jarrod',
+      view: 'main',
       repos: [props.sampleData] || []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -38,15 +39,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar color="light">
-          <NavbarBrand href="/">Commit Spy</NavbarBrand>
-          <NavItem>
-            <NavLink href="/login">Login</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href="/logout">Logout</NavLink>
-          </NavItem> 
-        </Navbar>
+        <NavBar username={this.state.username}/>
         <div>
           <RepoManager handleSubmit={this.handleSubmit}/>
         </div>
