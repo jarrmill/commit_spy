@@ -6,7 +6,9 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
-const { Users, Sessions } = require('../database');
+const morgan = require('morgan');
+const axios = require('axios');
+const { Users, Sessions, Repos } = require('../database');
 
 //configure env variables
 require('dotenv').config();
@@ -49,6 +51,7 @@ app.use(express.static('dist'));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(cookieParser());
+app.use(morgan('combined'))
 //the keys argument can be any number, but it needs to be secret. 
 app.use(cookieSession({
   name: 'session',
@@ -72,13 +75,63 @@ app.get('/login/callback', passport.authenticate('github', { failureRedirect: '/
 app.get('/users/repos', function(req, res) {
   if (req.session.token) {
     Sessions.getSession(req.session.token)
+    .then((user) => {
+      //res.send(`Welcome back ${results.rows[0].name}`);
+      const id = user.rows[0].id;
+      return Repos.getRepos(id);
+    })
     .then((results) => {
-      res.send(`Welcome back ${results.rows[0].name}`);
+      console.log('Got results!: ', results.rows);
+      const username = results.rows[0].name;
+      const repos = results.rows;
+      const headers = { headers: { "Authorization": `token ${req.session.token}`}}
+
+      // axios.get(`https://api.github.com/repos/jarrmill/mvp/commits`, headers)
+      //   .then((results) => {
+      //     console.log('Results: ', results.data)
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //   })
+      let promiseArray = repos.map((repo) => {
+        return axios.get(`https://api.github.com/repos/${repo.name}/${repo.repo}/commits`, headers)
+      })
+      Promise.all(promiseArray)
+        .then((apiResults) => {
+          const commits = apiResults.map(result => result.data);
+          res.json({ username, repos: commits })
+        })
+        .catch((apiErr) => {
+          console.error('Error in GitHub API call: ', apiErr);
+        })
     })
     .catch((err) => {
+      console.error('Error in get repos: ', err);
       res.send();
     })
   }
 })
+
+app.post('/users/repos', function(req, res) {
+  console.log('Hello from post /users/repos');
+  const { organization, repository } = req.body;
+
+  if (req.session.token) {
+    Sessions.getSession(req.session.token)
+    .then((results) => {
+      const user_id = results.rows[0].id;
+      return Repos.createRepo(user_id, organization, repository);
+    })
+    .then(() => {
+      res.status(201);
+      res.send();
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+  } else {
+    send();
+  }
+});
 
 app.listen(port, () => console.log(`-Server Boot Successful. Running on port ${port}.`));

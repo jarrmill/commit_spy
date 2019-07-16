@@ -21,7 +21,9 @@ class RepoManager extends Component {
     e.preventDefault();
     const { organization, repository} = this.state;
 
-    console.log(organization, repository);
+    this.props.handleSubmit(organization, repository);
+
+    this.setState({ organization: '', repository: ''});
   }
 
   render() {

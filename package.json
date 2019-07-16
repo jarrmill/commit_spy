@@ -31,6 +31,7 @@
     "passport": "^0.4.0",
     "passport-github": "^1.1.0",
     "pg": "^7.11.0",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "reactstrap": "^8.0.1"
@@ -41,6 +42,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
     "live-server": "^1.2.1",
+    "morgan": "^1.9.1",
     "nodemon": "^1.19.0",
     "path": "^0.12.7",
     "webpack": "^4.32.2",
