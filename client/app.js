@@ -13,6 +13,8 @@ class App extends Component {
       repos: [props.sampleData] || []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleViewChange = this.handleViewChange.bind(this);
+    this.handleRemoveRepo = this.handleRemoveRepo.bind(this);
   }
 
   componentDidMount() {
@@ -35,17 +37,44 @@ class App extends Component {
         console.error(err);
       })
   };
+
+  handleViewChange(newView) {
+    this.setState({view: newView});
+  }
+  handleRemoveRepo(organization, repository, arrIndex) {
+    console.log('Removing: ', organization, repository);
+    console.log('Array index: ', arrIndex);
+    axios.delete('/user/repos', {data: {organization, repository}})
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+  }
+
+  router() {
+    switch(this.state.view) {
+      case "main":
+        return (
+          <RepoList repos={this.state.repos} />
+        )
+      case "manager":
+        return (
+          <RepoManager
+            handleSubmit={this.handleSubmit}
+            repos={this.state.repos}
+            handleRemoveRepo={this.handleRemoveRepo}/>
+        )
+    }
+  }
   
   render() {
+    const { username, view } = this.state;
     return (
       <div>
-        <NavBar username={this.state.username}/>
-        <div>
-          <RepoManager handleSubmit={this.handleSubmit}/>
-        </div>
-        <div>
-          <RepoList repos={this.state.repos} />
-        </div>
+        <NavBar view={view} username={username} handleViewChange={this.handleViewChange}/>
+        { this.router()}
       </div>
     );
   }

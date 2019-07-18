@@ -113,7 +113,6 @@ app.get('/users/repos', function(req, res) {
 })
 
 app.post('/users/repos', function(req, res) {
-  console.log('Hello from post /users/repos');
   const { organization, repository } = req.body;
 
   if (req.session.token) {
@@ -133,5 +132,26 @@ app.post('/users/repos', function(req, res) {
     send();
   }
 });
+
+app.delete('/user/repos', (req, res) => {
+  const { organization, repository } = req.body;
+  // if (req.session.token) {
+  //   Sessions.getSession(req.session.token)
+  //   .then((results) => {
+  //     const user_id = results.rows[0].id;
+  //     return Repos.createRepo(user_id, organization, repository);
+  //   })
+  //   .then(() => {
+  //     res.status(201);
+  //     res.send();
+  //   })
+  //   .catch((err) => {
+  //     console.error(err);
+  //   })
+  // } else {
+  //   send();
+  // }
+  res.send('Hello!');
+})
 
 app.listen(port, () => console.log(`-Server Boot Successful. Running on port ${port}.`));

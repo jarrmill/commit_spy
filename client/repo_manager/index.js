@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import RepoList from './repo_list';
 
 class RepoManager extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       url: '',
 
     }
-
+    console.log('repos: ', props.repos);
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -33,16 +34,19 @@ class RepoManager extends Component {
   render() {
     const { url } = this.state;
     return (
-      <Form>
-        <FormGroup>
-          <Label>Add a Repository by Url:</Label>
-          <Input type="text"
-                 placeholder="Paste the URL of the Repo you want to follow"
-                 value={url}
-                 onChange={(e) => this.onChange(e)}></Input>
-        </FormGroup>
-        <Button onClick={(e) => this.onSubmit(e)}>Add</Button>
-      </Form>
+      <div>
+        <Form>
+          <FormGroup>
+            <Label>Add a Repository by Url:</Label>
+            <Input type="text"
+                  placeholder="Paste the URL of the Repo you want to follow"
+                  value={url}
+                  onChange={(e) => this.onChange(e)}></Input>
+          </FormGroup>
+          <Button onClick={(e) => this.onSubmit(e)}>Add</Button>
+        </Form>
+        <RepoList repos={this.props.repos} handleRemoveRepo={this.props.handleRemoveRepo}/>
+      </div>
     )
   }
 }
