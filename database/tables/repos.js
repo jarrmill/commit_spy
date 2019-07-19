@@ -29,7 +29,23 @@ const getRepos = function(user_id) {
   })
 }
 
+const deleteRepo = function(user_id, organization, repo) {
+  return new Promise((resolve, reject) => {
+    let query = `DELETE FROM repos WHERE user_id=${user_id}
+                 AND organization='${organization}'
+                 AND repo='${repo}';`
+    client.query(query, (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  })
+}
+
 module.exports = {
   createRepo,
-  getRepos
+  getRepos,
+  deleteRepo,
 }

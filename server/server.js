@@ -114,44 +114,49 @@ app.get('/users/repos', function(req, res) {
 
 app.post('/users/repos', function(req, res) {
   const { organization, repository } = req.body;
-
+  const headers = { headers: { "Authorization": `token ${req.session.token}`}}
+  
   if (req.session.token) {
     Sessions.getSession(req.session.token)
-    .then((results) => {
-      const user_id = results.rows[0].id;
+    .then((userResults) => {
+      const user_id = userResults.rows[0].id;
       return Repos.createRepo(user_id, organization, repository);
     })
     .then(() => {
+      return axios.get(`https://api.github.com/repos/${organization}/${repository}/commits`, headers)
+    })
+    .then((results) => {
       res.status(201);
-      res.send();
+      res.json(results.data);
+      
     })
     .catch((err) => {
       console.error(err);
     })
   } else {
-    send();
+    res.status(401);
+    res.send();
   }
 });
 
 app.delete('/user/repos', (req, res) => {
   const { organization, repository } = req.body;
-  // if (req.session.token) {
-  //   Sessions.getSession(req.session.token)
-  //   .then((results) => {
-  //     const user_id = results.rows[0].id;
-  //     return Repos.createRepo(user_id, organization, repository);
-  //   })
-  //   .then(() => {
-  //     res.status(201);
-  //     res.send();
-  //   })
-  //   .catch((err) => {
-  //     console.error(err);
-  //   })
-  // } else {
-  //   send();
-  // }
-  res.send('Hello!');
+  if (req.session.token) {
+    Sessions.getSession(req.session.token)
+    .then((results) => {
+      const user_id = results.rows[0].id;
+      return Repos.deleteRepo(user_id, organization, repository);
+    })
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.send();
+    })
+  } else {
+    res.sendStatus(200);
+  }
 })
 
 app.listen(port, () => console.log(`-Server Boot Successful. Running on port ${port}.`));

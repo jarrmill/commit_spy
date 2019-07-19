@@ -21,6 +21,8 @@ class App extends Component {
     // axios.get('/users/repos')
     //   .then((results) => {
     //     const { username, repos } = results.data;
+    //     console.log('User: ', username);
+    //     console.log('Repos: ', repos);
     //     this.setState({ username, repos})
     //   })
     //   .catch((err) => {
@@ -29,9 +31,14 @@ class App extends Component {
   }
 
   handleSubmit(organization, repository) {
+    const repos = this.state.repos.slice();
+
     axios.post('http://localhost:3000/users/repos', { organization, repository })
       .then((results) => {
-        console.log(results);
+        console.log('POST results: ', results);
+        const newCommits = results.data;
+        repos.push(newCommits);
+        this.setState({repos});
       })
       .catch((err) => {
         console.error(err);
@@ -42,11 +49,12 @@ class App extends Component {
     this.setState({view: newView});
   }
   handleRemoveRepo(organization, repository, arrIndex) {
-    console.log('Removing: ', organization, repository);
-    console.log('Array index: ', arrIndex);
-    axios.delete('/user/repos', {data: {organization, repository}})
+    const repos = this.state.repos.slice();
+    axios.delete('/user/repos', { data: {organization, repository} })
       .then((result) => {
         console.log(result);
+        repos.splice(arrIndex, 1);
+        this.setState({repos});
       })
       .catch((err) => {
         console.error(err);

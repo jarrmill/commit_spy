@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 
 const RepoList = props => {
+  console.log('Repo List props: ', props);
   const mapRepos = () => {
     return props.repos.map((repo, i) => {
       const urlArr = repo[0].html_url.split('/');
