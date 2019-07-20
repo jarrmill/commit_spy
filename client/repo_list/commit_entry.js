@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   card: {
     minWidth: 275,
     backgroundColor: '#ddd',
-    margin: '20px'
+    margin: '5px'
   },
   bullet: {
     display: 'inline-block',
@@ -31,7 +31,6 @@ const CommitEntry = props => {
   const { commit } = props;
   const classes = useStyles();
   const avatar_url = (commit.author) ? commit.author.avatar_url : 'https://github.com/identicons/jasonlong.png';
-  console.log('Commit: ', commit);
   const date = dateFns.distanceInWordsToNow(new Date(commit.commit.author.date));
   return (
     <Card className={classes.card}>
@@ -45,7 +44,6 @@ const CommitEntry = props => {
         <Typography variant="body1" color="textPrimary" component="p">
           {commit.commit.message}
         </Typography>
-        <div>{commit.commit.message}</div>
       </CardContent>
     </Card>
   )
