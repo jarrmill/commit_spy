@@ -1,5 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Fab from '@material-ui/core/Fab';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const RepoList = props => {
   console.log('Repo List props: ', props);
@@ -8,19 +12,24 @@ const RepoList = props => {
       const urlArr = repo[0].html_url.split('/');
       const org = urlArr[3]
       const repository = urlArr[4]
-      console.log(org, repository);
       return (
-        <div>
-          <div>{org} - {repository}</div>
-          <button onClick={() => props.handleRemoveRepo(org, repository, i)}>Remove</button>
-        </div>
+        <ListItem>
+          <div style={{marginRight: '10px'}}>{org} - {repository}</div>
+          <Fab
+            color="secondary"
+            aria-label="Delete"
+            size="small"
+            onClick={() => props.handleRemoveRepo(org, repository, i)}>
+            <DeleteIcon />
+          </Fab>
+        </ListItem>
       )
     })
   }
   return (
-    <div>
+    <List>
       { mapRepos() }
-    </div>
+    </List>
   )
 }
 

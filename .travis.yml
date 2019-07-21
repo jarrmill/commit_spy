@@ -1,0 +1,14 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t jarrmill/build-test -f ./Dockerfile ./
+
+script:
+  - docker run jarrmill/build-test npm test -- --coverage
+
+after_success:
+  - docker build -t jarrmill/commit-spy ./
+
+

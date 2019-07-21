@@ -1,8 +1,8 @@
 const { Client } = require('pg');
 const client = new Client({
-  user: 'jarrodmiller',
-  database: 'commitspy',
-  password: ''
+  user: process.env.PGUSER,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD
 });
 
 client.connect()
