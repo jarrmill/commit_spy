@@ -10,5 +10,9 @@ script:
 
 after_success:
   - docker build -t jarrmill/commit-spy ./
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push -t jarrmill/commit-spy
 
 
