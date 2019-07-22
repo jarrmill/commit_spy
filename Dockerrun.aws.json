@@ -20,7 +20,7 @@
           "containerPort":80
         }
       ],
-      "links": ["api"]
+      "links": ["server", "nginx"]
     }
   ]
 }
