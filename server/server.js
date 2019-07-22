@@ -159,4 +159,4 @@ app.delete('/user/repos', (req, res) => {
   }
 })
 
-app.listen(port, () => console.log(`-Server Boot Successful. Running on port ${port}. ENV DETECTED: ${test_var}`));
+app.listen(port, () => console.log(`-Server Boot Successful. Running on port ${port}. ENV DETECTED: ${process.env.CLIENT_ID.slice(0,5)}`));
