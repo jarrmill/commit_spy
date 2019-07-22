@@ -6,7 +6,7 @@
       "image":"jarrmill/commit-spy",
       "hostname": "api",
       "essential": false,
-      "memory": 128
+      "memory": 256
     },
     {
       "name":"nginx",
