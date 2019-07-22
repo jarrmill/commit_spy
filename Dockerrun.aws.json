@@ -14,7 +14,7 @@
       "hostname":"router",
       "essential": true,
       "memory": 128,
-      "postMappings": [
+      "portMappings": [
         {
           "hostPort":80,
           "containerPort":80
