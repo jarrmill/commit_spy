@@ -5,13 +5,15 @@
       "name":"server",
       "image":"jarrmill/commit-spy",
       "hostname": "api",
-      "essential": false
+      "essential": false,
+      "memory": 128
     },
     {
       "name":"nginx",
       "image": "jarrmill/commit-spy-nginx",
       "hostname":"router",
       "essential": true,
+      "memory": 128,
       "postMappings": [
         {
           "hostPort":80,
