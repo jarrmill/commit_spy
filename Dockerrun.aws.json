@@ -3,7 +3,22 @@
   "containerDefinitions": [
     {
       "name":"server",
-      "image":"jarrmill/commit-spy"
+      "image":"jarrmill/commit-spy",
+      "hostname": "api",
+      "essential": false
+    },
+    {
+      "name":"nginx",
+      "image": "jarrmill/commit-spy-nginx",
+      "hostname":"router",
+      "essential": true,
+      "postMappings": [
+        {
+          "hostPort":80,
+          "containerPort":80
+        }
+      ],
+      "links": ["api"]
     }
   ]
 }
