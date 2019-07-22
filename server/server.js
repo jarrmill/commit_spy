@@ -9,7 +9,7 @@ const cookieSession = require('cookie-session');
 const morgan = require('morgan');
 const axios = require('axios');
 const { Users, Sessions, Repos } = require('../database');
-
+const test_var = process.env.TEST_VAR || 'NO ENV DETECTED';
 //configure env variables
 require('dotenv').config();
 
@@ -159,4 +159,4 @@ app.delete('/user/repos', (req, res) => {
   }
 })
 
-app.listen(port, () => console.log(`-Server Boot Successful. Running on port ${port}.`));
+app.listen(port, () => console.log(`-Server Boot Successful. Running on port ${port}. ENV DETECTED: ${test_var}`));
