@@ -21,18 +21,18 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // axios.get('/users/repos')
-    //   .then((results) => {
-    //     const { username, repos } = results.data;
-    //     console.log('User: ', username);
-    //     console.log('Repos: ', repos);
-    //     this.setState({ username, repos}, () => {
-    //       console.log('New State: ', this.state.repos)
-    //     })
-    //   })
-    //   .catch((err) => {
-    //     console.log('Error: ', err);
-    //   })
+    axios.get('/users/repos')
+      .then((results) => {
+        const { username, repos } = results.data;
+        console.log('User: ', username);
+        console.log('Repos: ', repos);
+        this.setState({ username, repos}, () => {
+          console.log('New State: ', this.state.repos)
+        })
+      })
+      .catch((err) => {
+        console.log('Error: ', err);
+      })
   }
 
   handleSubmit(organization, repository) {
