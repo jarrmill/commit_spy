@@ -2,21 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import CommitEntry from './commit_entry';
 import RepoHeader from './repo_header';
-import Container from '@material-ui/core/Container';
 
 const RepoEntry = props => {
-  const { repo, id } = props;
-  const organization = props.repo[0].html_url.split('/')[3];
-  const repository = props.repo[0].html_url.split('/')[4]
-  const style = {
-    margin: '0px',
-  }
-  const commits = props.repo.map((commit, i) => <CommitEntry key={`commit-${id}-${i}`} commit={commit}/>)
+  const { repo, id, limit } = props;
+  const organization = repo[0].html_url.split('/')[3];
+  const repository = repo[0].html_url.split('/')[4]
+  const commits = repo.map((commit, i) => {
+    return (i < limit) ? <CommitEntry key={`commit-${id}-${i}`} commit={commit}/> : null;
+  })
   return (
-    <Container style={style}>
+    <div>
       <RepoHeader organization={organization} repository={repository}/>
       {commits}
-    </Container>
+    </div>
   )
 }
 

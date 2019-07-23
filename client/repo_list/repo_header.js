@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const RepoHeader = props => {
   return (
-    <div style={{margin: '10px'}}>
+    <div style={{margin: '5px'}}>
       {props.organization} - {props.repository}
     </div>
   );

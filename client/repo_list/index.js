@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import RepoEntry from './repo_entry';
 
 const RepoList = props => {
-  const { repos } = props;
+  const { repos, limit } = props;
   return (
     <div>
-      { repos.map((repo, i) => <RepoEntry key={`repo-${i}`} id={i} repo={repo} /> )}
+      { repos.map((repo, i) => <RepoEntry key={`repo-${i}`} id={i} repo={repo} limit={limit} /> )}
     </div>
     )
 }
