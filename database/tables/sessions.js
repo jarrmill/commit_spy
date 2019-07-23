@@ -4,8 +4,9 @@ const createSession = function (github_id, session_token) {
   //ON CONFLICT DO NOTHING
   return new Promise((resolve, reject) => {
     let query = `INSERT INTO sessions (github_id, session)
-                 VALUES (${github_id}, '${session_token}');`;
-    client.query(query, (err, res) => {
+                 VALUES ($1, $2);`;
+    let values = [github_id, session_token]
+    client.query(query, values, (err, res) => {
       if (err) {
         reject(err);
       } else {
@@ -19,8 +20,9 @@ const getSession = function(session_token) {
   return new Promise((resolve, reject) => {
     let query = `SELECT * FROM sessions
                  INNER JOIN users ON sessions.github_id = users.github_id
-                 WHERE sessions.session='${session_token}';`;
-    client.query(query, (err, res) => {
+                 WHERE sessions.session=$1;`;
+    let values = [session_token]
+    client.query(query, values, (err, res) => {
       if (err) {
         reject(err);
       } else {

@@ -4,8 +4,9 @@ const createUser = function (github_id, name) {
   //ON CONFLICT DO NOTHING
   return new Promise((resolve, reject) => {
     let query = `INSERT INTO users (name, github_id)
-                 VALUES ('${name}', '${github_id}')
+                 VALUES ($1, $2)
                  ON CONFLICT DO NOTHING;`;
+    let values = [name, github_id]
     client.query(query, (err, res) => {
       if (err) {
         reject(err);
@@ -17,9 +18,10 @@ const createUser = function (github_id, name) {
 }
 
 const findOrCreate = function (github_id, name) {
-  const query = `select * from users WHERE github_id='${github_id}'`;
+  const query = `select * from users WHERE github_id=$1`;
+  const values = [github_id]
   return new Promise((resolve, reject) => {
-    client.query(query, (err, res) => {
+    client.query(query, values, (err, res) => {
       if (err) {
         console.error('Encountered error: ', err);
         reject(err);

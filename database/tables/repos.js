@@ -3,8 +3,9 @@ const client = require('../config.js');
 const createRepo = function(user_id, organization, repo) {
   return new Promise((resolve, reject) => {
     let query = `INSERT INTO repos (user_id, organization, repo)
-                 VALUES ('${user_id}', '${organization}', '${repo}');`;
-    client.query(query, (err, res) => {
+                 VALUES ($1, $2, $3);`;
+    let values = [user_id, organization, repo];
+    client.query(query, values, (err, res) => {
       if (err) {
         reject(err);
       } else {
@@ -18,8 +19,9 @@ const createRepo = function(user_id, organization, repo) {
 const getRepos = function(user_id) {
   return new Promise((resolve, reject) => {
     let query = `SELECT * FROM repos INNER JOIN users
-                 ON repos.user_id=users.id WHERE repos.user_id=${user_id};`;
-    client.query(query, (err, res) => {
+                 ON repos.user_id=users.id WHERE repos.user_id=$1;`;
+    let values = [user_id];
+    client.query(query, values, (err, res) => {
       if (err) {
         reject(err);
       } else {
@@ -31,10 +33,11 @@ const getRepos = function(user_id) {
 
 const deleteRepo = function(user_id, organization, repo) {
   return new Promise((resolve, reject) => {
-    let query = `DELETE FROM repos WHERE user_id=${user_id}
-                 AND organization='${organization}'
-                 AND repo='${repo}';`
-    client.query(query, (err, res) => {
+    let query = `DELETE FROM repos WHERE user_id=$1
+                 AND organization=$2
+                 AND repo=$3;`
+    let values = [user_id, organization, repo];
+    client.query(query, values, (err, res) => {
       if (err) {
         reject(err);
       } else {

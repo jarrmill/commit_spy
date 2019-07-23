@@ -8,10 +8,12 @@ const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const morgan = require('morgan');
 const axios = require('axios');
-const { Users, Sessions, Repos } = require('../database');
 const test_var = process.env.TEST_VAR || 'NO ENV DETECTED';
 //configure env variables
 require('dotenv').config();
+
+//connect to database - needs to be after dotenv to properly load env
+const { Users, Sessions, Repos } = require('../database');
 
 //configure Github Authentication Strategy
 
