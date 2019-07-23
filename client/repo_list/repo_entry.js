@@ -9,7 +9,7 @@ const RepoEntry = props => {
   const organization = props.repo[0].html_url.split('/')[3];
   const repository = props.repo[0].html_url.split('/')[4]
   const style = {
-    margin: '10px',
+    margin: '0px',
   }
   const commits = props.repo.map((commit, i) => <CommitEntry key={`commit-${id}-${i}`} commit={commit}/>)
   return (

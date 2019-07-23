@@ -53,7 +53,7 @@ app.use(express.static('dist'));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(cookieParser());
-app.use(morgan('combined'))
+app.use(morgan('dev'))
 //the keys argument can be any number, but it needs to be secret. 
 app.use(cookieSession({
   name: 'session',
@@ -96,7 +96,7 @@ app.get('/users/repos', function(req, res) {
       //     console.error(error);
       //   })
       let promiseArray = repos.map((repo) => {
-        return axios.get(`https://api.github.com/repos/${repo.name}/${repo.repo}/commits`, headers)
+        return axios.get(`https://api.github.com/repos/${repo.organization}/${repo.repo}/commits`, headers)
       })
       Promise.all(promiseArray)
         .then((apiResults) => {

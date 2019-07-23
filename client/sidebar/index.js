@@ -5,9 +5,9 @@ import ListItem from '@material-ui/core/ListItem';
 import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const RepoList = props => {
-  console.log('Repo List props: ', props);
+const Sidebar = props => {
   const mapRepos = () => {
+    console.log('Sidebar props: ', props)
     return props.repos.map((repo, i) => {
       const urlArr = repo[0].html_url.split('/');
       const org = urlArr[3]
@@ -33,7 +33,8 @@ const RepoList = props => {
   )
 }
 
-RepoList.propTypes = {
-  repos: PropTypes.arrayOf(PropTypes.object).isRequired
+Sidebar.propTypes = {
+  repos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  handleRemoveRepo: PropTypes.func.isRequired
 }
-export default RepoList;
+export default Sidebar;

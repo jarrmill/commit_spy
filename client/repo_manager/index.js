@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-import RepoList from './repo_list';
 
 class RepoManager extends Component {
   constructor(props) {
@@ -34,7 +33,7 @@ class RepoManager extends Component {
   render() {
     const { url } = this.state;
     return (
-      <div>
+      <div style={{margin: '5px'}}>
         <Form>
           <FormGroup>
             <Label>Add a Repository by Url:</Label>
@@ -45,7 +44,6 @@ class RepoManager extends Component {
           </FormGroup>
           <Button onClick={(e) => this.onSubmit(e)}>Add</Button>
         </Form>
-        <RepoList repos={this.props.repos} handleRemoveRepo={this.props.handleRemoveRepo}/>
       </div>
     )
   }

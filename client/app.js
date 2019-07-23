@@ -3,6 +3,7 @@ import axios from 'axios';
 import RepoManager from './repo_manager';
 import RepoList from './repo_list';
 import NavBar from './navbar';
+import Sidebar from './sidebar';
 
 class App extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ class App extends Component {
     this.state = {
       username: '',
       view: 'main',
-      repos: [props.sampleData] || []
+      repos: props.sampleData || []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleViewChange = this.handleViewChange.bind(this);
@@ -18,16 +19,18 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios.get('/users/repos')
-      .then((results) => {
-        const { username, repos } = results.data;
-        console.log('User: ', username);
-        console.log('Repos: ', repos);
-        this.setState({ username, repos})
-      })
-      .catch((err) => {
-        console.log('Error: ', err);
-      })
+    // axios.get('/users/repos')
+    //   .then((results) => {
+    //     const { username, repos } = results.data;
+    //     console.log('User: ', username);
+    //     console.log('Repos: ', repos);
+    //     this.setState({ username, repos}, () => {
+    //       console.log('New State: ', this.state.repos)
+    //     })
+    //   })
+    //   .catch((err) => {
+    //     console.log('Error: ', err);
+    //   })
   }
 
   handleSubmit(organization, repository) {
@@ -62,10 +65,22 @@ class App extends Component {
   }
 
   router() {
+    console.log('Router state: ', this.state);
     switch(this.state.view) {
       case "main":
         return (
-          <RepoList repos={this.state.repos} />
+          <div style={{display: "flex"}}>
+            <div style={{backgroundColor: '#efe', flex: 1}}>
+              <Sidebar repos={this.state.repos} handleRemoveRepo={this.handleRemoveRepo}/>
+            </div>
+            <div style={{flex: 3}}>
+              <RepoManager
+                handleSubmit={this.handleSubmit}
+                repos={this.state.repos}
+                handleRemoveRepo={this.handleRemoveRepo}/> 
+              <RepoList repos={this.state.repos} />
+            </div>
+          </div>
         )
       case "manager":
         return (
