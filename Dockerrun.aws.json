@@ -5,14 +5,27 @@
       "name":"server",
       "image":"jarrmill/commit-spy",
       "hostname": "api",
+      "command": ["echo", "y", "|", "./init-letsencrypt.sh"], 
       "essential": false,
-      "memory": 256,
+      "memory": 256
+    },
+    {
+      "name":"nginx",
+      "image": "jarrmill/commit-spy-nginx",
+      "hostname":"nginx",
+      "essential": true,
+      "memory": 128,
       "portMappings": [
         {
-          "hostPort":3000,
-          "containerPort":3000
+          "hostPort":80,
+          "containerPort":80
+        },
+        {
+          "hostPort": 443,
+          "containerPort":443
         }
-      ]
+      ],
+      "links": ["server"]
     }
   ]
 }
