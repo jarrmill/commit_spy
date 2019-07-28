@@ -5,7 +5,7 @@
   "main": "webpack.config.js",
   "scripts": {
     "test": "jest",
-    "build": "webpack -d --watch",
+    "build": "webpack -d",
     "start": "nodemon ./server/server.js"
   },
   "repository": {
