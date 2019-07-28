@@ -11,8 +11,8 @@ import Avatar from '@material-ui/core/Avatar';
 const useStyles = makeStyles({
   card: {
     minWidth: 275,
-    backgroundColor: '#ddd',
-    margin: '5px'
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    margin: '5px',
   }
 });
 

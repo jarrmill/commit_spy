@@ -1,10 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Fab from '@material-ui/core/Fab';
-import DeleteIcon from '@material-ui/icons/Delete';
-
+import { Repo, DeleteButton } from './styles';
 const Sidebar = props => {
   const mapRepos = () => {
     console.log('Sidebar props: ', props)
@@ -13,16 +10,16 @@ const Sidebar = props => {
       const org = urlArr[3]
       const repository = urlArr[4]
       return (
-        <ListItem>
-          <div style={{marginRight: '10px'}}>{org} - {repository}</div>
-          <Fab
+        <Repo>
+          <div style={{marginRight: '10px'}}>>{org} - {repository}</div>
+          <DeleteButton
             color="secondary"
             aria-label="Delete"
             size="small"
             onClick={() => props.handleRemoveRepo(org, repository, i)}>
-            <DeleteIcon />
-          </Fab>
-        </ListItem>
+            Remove
+          </DeleteButton>
+        </Repo>
       )
     })
   }

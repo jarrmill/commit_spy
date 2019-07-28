@@ -4,6 +4,7 @@ import RepoInput from './repo_input';
 import RepoList from './repo_list';
 import NavBar from './navbar';
 import Sidebar from './sidebar';
+import { Main } from './app.styles';
 
 class App extends Component {
   constructor(props) {
@@ -22,17 +23,17 @@ class App extends Component {
 
   componentDidMount() {
     axios.get('/users/repos')
-      .then((results) => {
-        const { username, repos } = results.data;
-        console.log('User: ', username);
-        console.log('Repos: ', repos);
-        this.setState({ username, repos}, () => {
-          console.log('New State: ', this.state.repos)
-        })
-      })
-      .catch((err) => {
-        console.log('Error: ', err);
-      })
+      // .then((results) => {
+      //   const { username, repos } = results.data;
+      //   console.log('User: ', username);
+      //   console.log('Repos: ', repos);
+      //   this.setState({ username, repos}, () => {
+      //     console.log('New State: ', this.state.repos)
+      //   })
+      // })
+      // .catch((err) => {
+      //   console.log('Error: ', err);
+      // })
   }
 
   handleSubmit(organization, repository) {
@@ -75,10 +76,10 @@ class App extends Component {
       case "main":
         return (
           <div style={{display: "flex"}}>
-            <div style={{backgroundColor: '#efe', flex: 1}}>
+            <div style={{backgroundColor: '#ddd', flex: 1}}>
               <Sidebar repos={this.state.repos} handleRemoveRepo={this.handleRemoveRepo}/>
             </div>
-            <div style={{flex: 3}}>
+            <Main style={{flex: 3}}>
               <RepoInput
                 repos={this.state.repos}
                 displayLimit={this.state.displayLimit}
@@ -86,7 +87,7 @@ class App extends Component {
                 handleRemoveRepo={this.handleRemoveRepo}
                 handleLimitChange={this.handleLimitChange} />
               <RepoList repos={this.state.repos} limit={this.state.displayLimit} />
-            </div>
+            </Main>
           </div>
         )
     }

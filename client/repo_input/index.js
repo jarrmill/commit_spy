@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-
+import { SearchContainer, Submit, Input } from './styles';
 class RepoInput extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +35,7 @@ class RepoInput extends Component {
     const { organization, repository } = this.cleanUrl(url);
     this.props.handleSubmit(organization, repository);
 
-    this.setState({ organization: '', repository: ''});
+    this.setState({ url: '' });
   }
   onLimitChange (e) {
     this.props.handleLimitChange(e.target.value);
@@ -46,24 +45,24 @@ class RepoInput extends Component {
     const { url } = this.state;
     return (
       <div style={{margin: '5px'}}>
-        <Form>
-          <FormGroup>
-            <Label>Add a Repository by Url:</Label>
+            <div>
+              <label>Add a Repository by Url:</label>
+            </div>
+        <SearchContainer>
             <Input type="text"
                   placeholder="Paste the URL of the Repo you want to follow"
                   value={url}
                   onChange={(e) => this.onChange(e)}></Input>
-          </FormGroup>
-          <Button onClick={(e) => this.onSubmit(e)}>Add</Button>
-        </Form>
-        <Form>
+          <Submit onClick={(e) => this.onSubmit(e)}>Add</Submit>
+        </SearchContainer>
+        <form>
           <label>
             Number of commits to show:
             <select value={this.props.displayLimit} onChange={this.onLimitChange}>
               {this.renderOptions()}
             </select>
           </label>
-        </Form>
+        </form>
       </div>
     )
   }

@@ -11,13 +11,17 @@
     {
       "name":"nginx",
       "image": "jarrmill/commit-spy-nginx",
-      "hostname":"router",
+      "hostname":"nginx",
       "essential": true,
       "memory": 128,
       "portMappings": [
         {
           "hostPort":80,
           "containerPort":80
+        },
+        {
+          "hostPort": 443,
+          "containerPort":443
         }
       ],
       "links": ["server"]
