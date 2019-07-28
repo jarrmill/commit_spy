@@ -8,7 +8,18 @@ const RepoEntry = props => {
   const organization = repo[0].html_url.split('/')[3];
   const repository = repo[0].html_url.split('/')[4]
   const commits = repo.map((commit, i) => {
-    return (i < limit) ? <CommitEntry key={`commit-${id}-${i}`} commit={commit}/> : null;
+    //console.log(commit, repo);
+    if(i < limit) {
+      if (i === 0) {
+        return <CommitEntry key={`commit-${id}-${i}`} isRepeat={false} commit={commit}/>;
+      } else if(repo[i - 1].author && commit.author) {
+        let isRepeat = (i === 0) ? false : (commit.author.id === repo[i - 1].author.id);
+        return <CommitEntry key={`commit-${id}-${i}`} isRepeat={true} commit={commit}/>; 
+      }
+      else {
+        return <CommitEntry key={`commit-${id}-${i}`} isRepeat={false} commit={commit}/>;
+      }
+    }
   })
   return (
     <div>

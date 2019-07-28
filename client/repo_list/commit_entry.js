@@ -1,45 +1,44 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import dateFns from 'date-fns';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-
-const useStyles = makeStyles({
-  card: {
-    minWidth: 275,
-    backgroundColor: 'rgba(255,255,255,0.8)',
-    margin: '5px',
-  }
-});
+import { CommitContainer, Commit, AvatarContainer, Avatar, BodyContainer, HeaderContainer, Name } from './styles';
 
 const CommitEntry = props => {
-  const { commit } = props;
-  const classes = useStyles();
+  const { commit, isRepeat } = props;
   const avatar_url = (commit.author) ? commit.author.avatar_url : 'https://github.com/identicons/jasonlong.png';
   const date = dateFns.distanceInWordsToNow(new Date(commit.commit.author.date));
-  return (
-    <Card className={classes.card}>
-      <CardHeader avatar={
+  return (!isRepeat) ? (
+    <CommitContainer isRepeat={isRepeat}>
+      <AvatarContainer>
         <Avatar src={avatar_url}/>
-        }
-        title={commit.commit.author.name}
-        subheader={`- ${date} ago -`}
-        />
-      <CardContent>
-        <Typography variant="body1" color="textPrimary" component="p">
+      </AvatarContainer>
+      <Commit>
+        <HeaderContainer>
+          <Name>{commit.commit.author.name}</Name>
+          <i>{` - ${date} ago`}</i>
+        </HeaderContainer>
+        <BodyContainer>
           {commit.commit.message}
-        </Typography>
-      </CardContent>
-    </Card>
+        </BodyContainer>
+      </Commit>
+    </CommitContainer>
+  ) : (
+    <CommitContainer isRepeat={isRepeat}>
+      <AvatarContainer>
+      </AvatarContainer>
+      <Commit>
+        <BodyContainer>
+          <i>{`${date} ago - `}</i>
+          {commit.commit.message}
+        </BodyContainer>
+      </Commit>
+    </CommitContainer> 
   )
 }
 
 CommitEntry.propsTypes = {
   commit: PropTypes.object.isRequired,
+  isRepeat: PropTypes.bool
 }
 
 export default CommitEntry;

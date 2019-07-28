@@ -5,7 +5,7 @@
       "name":"server",
       "image":"jarrmill/commit-spy",
       "hostname": "api",
-      "command": ["echo", "y", "|", "./init-letsencrypt.sh"], 
+      "command": ["./init-letsencrypt.sh"], 
       "essential": false,
       "memory": 256
     },
