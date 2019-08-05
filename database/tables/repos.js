@@ -16,7 +16,7 @@ const createRepo = function(user_id, organization, repo) {
   })
 }
 
-const getRepos = function(user_id) {
+const getRepos = function(user_id, username) {
   return new Promise((resolve, reject) => {
     let query = `SELECT * FROM repos INNER JOIN users
                  ON repos.user_id=users.id WHERE repos.user_id=$1;`;
@@ -25,6 +25,7 @@ const getRepos = function(user_id) {
       if (err) {
         reject(err);
       } else {
+        res.username = username;
         resolve(res);
       }
     })

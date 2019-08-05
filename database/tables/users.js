@@ -7,7 +7,7 @@ const createUser = function (github_id, name) {
                  VALUES ($1, $2)
                  ON CONFLICT DO NOTHING;`;
     let values = [name, github_id]
-    client.query(query, (err, res) => {
+    client.query(query, values, (err, res) => {
       if (err) {
         reject(err);
       } else {
@@ -31,7 +31,7 @@ const findOrCreate = function (github_id, name) {
         } else {
           createUser(github_id, name)
           .then(res => {
-            resolve(res)
+             resolve(res)
           })
           .catch(err => {
             reject(err);

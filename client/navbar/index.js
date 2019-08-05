@@ -6,12 +6,15 @@ const NavBar = props => {
   const { view, username } = props;
   const isUserLoggedIn = (username !== '');
   const user_message = (isUserLoggedIn) ? `Welcome, ${username}` : '';
+  const usernameStyle = {
+    height: "100%",
+    paddingTop: "8px",
+  }
   if(isUserLoggedIn && view === 'main') {
     return (
       <Navbar color="light" light expand="md">
         <NavbarBrand href="/">Commit Spy</NavbarBrand>
-        <h6>{user_message}</h6>
-        <NavLink href="#" onClick={() => props.handleViewChange('manager')}>Manage Your Repositories</NavLink>
+        <h6 style={usernameStyle}>{user_message}</h6>
         <NavLink href="/logout">Logout</NavLink>
       </Navbar>
       )

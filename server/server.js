@@ -1,6 +1,5 @@
 const express = require('express')
 const app = express()
-const port = process.env.PORT || 443;
 const GitHubStrategy = require('passport-github').Strategy;
 const passport = require('passport');
 const bodyParser = require('body-parser');
@@ -8,9 +7,10 @@ const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const morgan = require('morgan');
 const axios = require('axios');
-const test_var = process.env.TEST_VAR || 'NO ENV DETECTED';
 //configure env variables
 require('dotenv').config();
+const test_var = process.env.TEST_VAR || 'NO ENV DETECTED';
+const port = process.env.SERVERPORT || 443;
 
 //connect to database - needs to be after dotenv to properly load env
 const { Users, Sessions, Repos } = require('../database');
@@ -78,14 +78,18 @@ app.get('/users/repos', function(req, res) {
   if (req.session.token) {
     Sessions.getSession(req.session.token)
     .then((user) => {
+      const username = user.rows[0].name;
       //res.send(`Welcome back ${results.rows[0].name}`);
       const id = user.rows[0].id;
-      return Repos.getRepos(id);
+      return Repos.getRepos(id, username);
     })
     .then((results) => {
-      console.log('Got results!: ', results.rows);
-      const username = results.rows[0].name;
+      console.log('Got results!: ', results);
+      const { username }  = results
       const repos = results.rows;
+      if (!repos.length) {
+        return res.send({username, repos: []});
+      }
       const headers = { headers: { "Authorization": `token ${req.session.token}`}}
 
       // axios.get(`https://api.github.com/repos/jarrmill/mvp/commits`, headers)
@@ -111,6 +115,8 @@ app.get('/users/repos', function(req, res) {
       console.error('Error in get repos: ', err);
       res.send();
     })
+  } else {
+    res.json({username: undefined, repos: undefined});
   }
 })
 

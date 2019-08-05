@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import { RepoName } from './styles';
 
 const RepoHeader = props => {
   return (
-    <div style={{margin: '5px'}}>
+    <RepoName>
       {props.organization} - {props.repository}
-    </div>
+    </RepoName>
   );
 }
 

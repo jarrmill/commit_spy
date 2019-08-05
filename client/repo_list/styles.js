@@ -18,6 +18,7 @@ export const Commit = styled.div`
 export const AvatarContainer = styled.div`
   margin-right: 10px;
   width: 50px;
+  min-width: 50px
 `
 
 export const Avatar = styled.img`
@@ -30,6 +31,11 @@ export const HeaderContainer = styled.div`
 
 export const BodyContainer = styled.div`
 
+`
+export const RepoName = styled.div`
+  margin:5px;
+  margin-top: 20px
+  font-size: 18px;
 `
 export const Name = styled.p`
   font-size: 110%;

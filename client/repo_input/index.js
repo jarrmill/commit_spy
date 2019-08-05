@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SearchContainer, Submit, Input } from './styles';
+import { RepoInputContainer, SearchContainer, Submit, Input } from './styles';
 class RepoInput extends Component {
   constructor(props) {
     super(props);
@@ -7,7 +7,6 @@ class RepoInput extends Component {
       url: '',
 
     }
-    console.log('repos: ', props.repos);
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onLimitChange = this.onLimitChange.bind(this);
@@ -22,7 +21,6 @@ class RepoInput extends Component {
     for (var i = 1; i <= 15; i++) {
       options.push(<option value={i}>{i}</option>);
     }
-    console.log(options);
     return options;
   }
   onChange(e) {
@@ -44,7 +42,7 @@ class RepoInput extends Component {
   render() {
     const { url } = this.state;
     return (
-      <div style={{margin: '5px'}}>
+      <RepoInputContainer>
             <div>
               <label>Add a Repository by Url:</label>
             </div>
@@ -57,13 +55,13 @@ class RepoInput extends Component {
         </SearchContainer>
         <form>
           <label>
-            Number of commits to show:
+            <span>Number of commits per repo: </span>
             <select value={this.props.displayLimit} onChange={this.onLimitChange}>
               {this.renderOptions()}
             </select>
           </label>
         </form>
-      </div>
+      </RepoInputContainer>
     )
   }
 }

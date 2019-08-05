@@ -4,7 +4,8 @@ import RepoInput from './repo_input';
 import RepoList from './repo_list';
 import NavBar from './navbar';
 import Sidebar from './sidebar';
-import { Main, SidebarContainer } from './app.styles';
+import Splash from './splash';
+import { Main, SidebarContainer, FirstCommitPage, FirstCommitContainer, FirstCommitMessage } from './app.styles';
 
 class App extends Component {
   constructor(props) {
@@ -24,12 +25,14 @@ class App extends Component {
   componentDidMount() {
     axios.get('/users/repos')
       .then((results) => {
-        const { username, repos } = results.data;
-        console.log('User: ', username);
-        console.log('Repos: ', repos);
-        this.setState({ username, repos}, () => {
-          console.log('New State: ', this.state.repos)
-        })
+        if(results.data.username) {
+          const { username, repos } = results.data;
+          console.log('Repos: ', repos);
+          this.setState({ username, repos}, () => console.log('Fini!'))
+
+        } else {
+         this.setState({view: 'splash'});
+        }
       })
       .catch((err) => {
         console.log('Error: ', err);
@@ -41,8 +44,7 @@ class App extends Component {
 
     axios.post('http://localhost:3000/users/repos', { organization, repository })
       .then((results) => {
-        console.log('POST results: ', results);
-        const newCommits = results.data;
+        const newCommits = results.data || [];
         repos.push(newCommits);
         this.setState({repos});
       })
@@ -61,7 +63,6 @@ class App extends Component {
     const repos = this.state.repos.slice();
     axios.delete('/user/repos', { data: {organization, repository} })
       .then((result) => {
-        console.log(result);
         repos.splice(arrIndex, 1);
         this.setState({repos});
       })
@@ -71,10 +72,29 @@ class App extends Component {
   }
 
   router() {
-    console.log('Router state: ', this.state);
+    const doesUserHaveRepos = (this.state.repos.length);
     switch(this.state.view) {
-      case "main":
+      case 'splash':
+        return <Splash handleViewChange={this.handleViewChange}/>
+      case "demo":
         return (
+          <div style={{display: "flex"}}>
+            <SidebarContainer style={{backgroundColor: '#ddd', flex: 1}}>
+              <Sidebar repos={this.state.repos} handleRemoveRepo={() => {}}/>
+            </SidebarContainer>
+            <Main>
+              <RepoInput
+                repos={this.props.sampleData}
+                displayLimit={this.state.displayLimit}
+                handleSubmit={() => {}}
+                handleRemoveRepo={() => {}}
+                handleLimitChange={() => {}} />
+              <RepoList repos={this.props.sampleData} limit={this.state.displayLimit} />
+            </Main>
+          </div>
+        )
+      case "main":
+        return ( doesUserHaveRepos ) ? (
           <div style={{display: "flex"}}>
             <SidebarContainer style={{backgroundColor: '#ddd', flex: 1}}>
               <Sidebar repos={this.state.repos} handleRemoveRepo={this.handleRemoveRepo}/>
@@ -89,6 +109,25 @@ class App extends Component {
               <RepoList repos={this.state.repos} limit={this.state.displayLimit} />
             </Main>
           </div>
+        ) : 
+        (
+          <FirstCommitPage>
+            <FirstCommitContainer>
+              <Main>
+                <FirstCommitMessage>
+                  <h1>Welcome to Commit Spy!</h1>
+                  <p>To get started, add a Github URL below. Feel free to use ours!</p>
+                  <p><b>https://github.com/jarrmill/commit_spy</b></p>
+                </FirstCommitMessage>
+              <RepoInput
+                repos={this.state.repos}
+                displayLimit={this.state.displayLimit}
+                handleSubmit={this.handleSubmit}
+                handleRemoveRepo={this.handleRemoveRepo}
+                handleLimitChange={this.handleLimitChange} />
+              </Main>
+            </FirstCommitContainer>
+          </FirstCommitPage>
         )
     }
   }
