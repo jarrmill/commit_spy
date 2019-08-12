@@ -27,12 +27,5 @@ services:
     volumes:
       - /app/node_modules
       - /.:/app
-    environment:
-      - PGUSER=postgres
-      - PGHOST=postgres
-      - PGDATABASE=postgres
-      - PGPASSWORD=postgres_password
-      - PGPORT=5432
-      - TEST_VAR='SUCCESS'
   
 
