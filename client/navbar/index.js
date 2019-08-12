@@ -12,28 +12,18 @@ const NavBar = props => {
   }
   if(isUserLoggedIn && view === 'main') {
     return (
-      <Navbar color="light" light expand="md">
+      <Navbar data-testid="navbar" color="light" light expand="md">
         <NavbarBrand href="/">Commit Spy</NavbarBrand>
         <h6 style={usernameStyle}>{user_message}</h6>
-        <NavLink href="/logout">Logout</NavLink>
+        <NavLink href="/logout">Log Out</NavLink>
       </Navbar>
       )
     }
-  else if(isUserLoggedIn && view === 'manager') {
-    return (
-      <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">Commit Spy</NavbarBrand>
-        <h6>{user_message}</h6>
-        <NavLink href="#" onClick={() => props.handleViewChange('main')}>Main</NavLink>
-        <NavLink href="/logout">Logout</NavLink>
-      </Navbar>
-    )
-  }
   else {
       return (
-        <Navbar color="light">
+        <Navbar data-testid="navbar" color="light">
           <NavbarBrand href="/">Commit Spy</NavbarBrand>
-          <NavLink href="/login">Login</NavLink>
+          <NavLink href="/login">Log In</NavLink>
         </Navbar>
         ) 
     }

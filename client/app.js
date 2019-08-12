@@ -12,7 +12,7 @@ class App extends Component {
     super(props);
     this.state = {
       username: '',
-      view: 'main',
+      view: 'splash',
       repos: props.sampleData || [],
       displayLimit: 5
     };
@@ -20,6 +20,8 @@ class App extends Component {
     this.handleViewChange = this.handleViewChange.bind(this);
     this.handleRemoveRepo = this.handleRemoveRepo.bind(this);
     this.handleLimitChange = this.handleLimitChange.bind(this);
+    this.handleDemoSubmit = this.handleDemoSubmit.bind(this);
+    this.handleDemoRemoveRepo = this.handleDemoRemoveRepo.bind(this);
   }
 
   componentDidMount() {
@@ -28,7 +30,7 @@ class App extends Component {
         if(results.data.username) {
           const { username, repos } = results.data;
           console.log('Repos: ', repos);
-          this.setState({ username, repos}, () => console.log('Fini!'))
+          this.setState({ username, repos, view: 'main'}, () => console.log('Fini!'))
 
         } else {
          this.setState({view: 'splash'});
@@ -42,7 +44,7 @@ class App extends Component {
   handleSubmit(organization, repository) {
     const repos = this.state.repos.slice();
 
-    axios.post('http://localhost:3000/users/repos', { organization, repository })
+    axios.post('/users/repos', { organization, repository })
       .then((results) => {
         const newCommits = results.data || [];
         repos.push(newCommits);
@@ -52,6 +54,22 @@ class App extends Component {
         console.error(err);
       })
   };
+
+  handleDemoSubmit(organization, repository) {
+    const repos = this.state.repos.slice();
+
+    axios.post('/users/repos/demo', { organization, repository })
+      .then((results) => {
+        console.log('Results: ', results.data);
+        const newCommits = results.data || [];
+        repos.push(newCommits);
+        this.setState({repos}, () => console.log('New State: ', this.state));
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+  }
+
   handleLimitChange(newLimit) {
     this.setState({displayLimit: newLimit})
   }
@@ -70,6 +88,12 @@ class App extends Component {
         console.error(err);
       })
   }
+  handleDemoRemoveRepo(arrIndex) {
+d    const repos = this.state.repos.slice();
+
+    repos.splice(arrIndex, 1);
+    this.setState({repos});
+  }
 
   router() {
     const doesUserHaveRepos = (this.state.repos.length);
@@ -80,16 +104,16 @@ class App extends Component {
         return (
           <div style={{display: "flex"}}>
             <SidebarContainer style={{backgroundColor: '#ddd', flex: 1}}>
-              <Sidebar repos={this.state.repos} handleRemoveRepo={() => {}}/>
+              <Sidebar repos={this.state.repos} handleRemoveRepo={this.handleDemoRemoveRepo}/>
             </SidebarContainer>
             <Main>
               <RepoInput
-                repos={this.props.sampleData}
+                repos={this.state.repos}
                 displayLimit={this.state.displayLimit}
-                handleSubmit={() => {}}
-                handleRemoveRepo={() => {}}
-                handleLimitChange={() => {}} />
-              <RepoList repos={this.props.sampleData} limit={this.state.displayLimit} />
+                handleSubmit={this.handleDemoSubmit}
+                handleRemoveRepo={this.handleDemoRemoveRepo}
+                handleLimitChange={this.handleLimitChange} />
+              <RepoList repos={this.state.repos} limit={this.state.displayLimit} />
             </Main>
           </div>
         )

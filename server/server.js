@@ -32,15 +32,11 @@ passport.use(new GitHubStrategy({
     const { id, username } = profile;
     Users.findOrCreate(id, username)
     .then((results) => {
-      console.log('Profile created for: ', username);
       return Sessions.createSession(id, accessToken);
     })
     .catch((err) => {
       console.error('Error in findOrCreate User: ', err);
       cb(err);
-    })
-    .then((result) => {
-      console.log('Session recorded');
     })
     .catch((err) => {
       console.error('Error in loggin User session: ', err);
@@ -79,12 +75,10 @@ app.get('/users/repos', function(req, res) {
     Sessions.getSession(req.session.token)
     .then((user) => {
       const username = user.rows[0].name;
-      //res.send(`Welcome back ${results.rows[0].name}`);
       const id = user.rows[0].id;
       return Repos.getRepos(id, username);
     })
     .then((results) => {
-      console.log('Got results!: ', results);
       const { username }  = results
       const repos = results.rows;
       if (!repos.length) {
@@ -92,13 +86,6 @@ app.get('/users/repos', function(req, res) {
       }
       const headers = { headers: { "Authorization": `token ${req.session.token}`}}
 
-      // axios.get(`https://api.github.com/repos/jarrmill/mvp/commits`, headers)
-      //   .then((results) => {
-      //     console.log('Results: ', results.data)
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //   })
       let promiseArray = repos.map((repo) => {
         return axios.get(`https://api.github.com/repos/${repo.organization}/${repo.repo}/commits`, headers)
       })
@@ -142,9 +129,25 @@ app.post('/users/repos', function(req, res) {
       console.error(err);
     })
   } else {
-    res.status(401);
+    res.status(201);
     res.send();
   }
+});
+
+app.post('/users/repos/demo', function(req, res) {
+  const { organization, repository } = req.body;
+  const query = `https://api.github.com/repos/${organization}/${repository}/commits?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`;  
+
+  axios.get(query)
+    .then((results) => {
+      res.status(201);
+      res.json(results.data);
+      
+    })
+    .catch((err) => {
+      console.error(err);
+      res.send();
+    })
 });
 
 app.delete('/user/repos', (req, res) => {
@@ -167,4 +170,4 @@ app.delete('/user/repos', (req, res) => {
   }
 })
 
-app.listen(port, () => console.log(`-Server Boot Successful. Running on port ${port}. ENV DETECTED: ${process.env.CLIENT_ID.slice(0,5)}`));
+app.listen(port, () => console.log(`-Server Boot Successful. Running on port ${port}`));

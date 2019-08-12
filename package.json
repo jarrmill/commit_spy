@@ -8,7 +8,9 @@
     "build": "webpack -d",
     "start": "node ./server/server.js",
     "watch": "webpack -d --watch",
-    "nodemon": "nodemon ./server/server.js"
+    "nodemon": "nodemon ./server/server.js",
+    "cypress:open": "npx cypress open"
+
   },
   "repository": {
     "type": "git",
@@ -52,8 +54,10 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "@testing-library/dom": "^5.6.0",
+    "@testing-library/jest-dom": "^4.0.0",
     "@testing-library/react": "^8.0.5",
     "babel-loader": "^8.0.6",
+    "cypress": "^3.4.1",
     "jest": "^24.8.0",
     "jest-dom": "^4.0.0",
     "live-server": "^1.2.1",
