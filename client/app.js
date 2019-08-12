@@ -77,6 +77,7 @@ class App extends Component {
   handleViewChange(newView) {
     this.setState({view: newView});
   }
+
   handleRemoveRepo(organization, repository, arrIndex) {
     const repos = this.state.repos.slice();
     axios.delete('/user/repos', { data: {organization, repository} })
@@ -88,6 +89,7 @@ class App extends Component {
         console.error(err);
       })
   }
+  
   handleDemoRemoveRepo(arrIndex) {
     const repos = this.state.repos.slice();
 

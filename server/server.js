@@ -1,60 +1,36 @@
 const express = require('express')
 const app = express()
-const GitHubStrategy = require('passport-github').Strategy;
-const passport = require('passport');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const morgan = require('morgan');
 const axios = require('axios');
+const passport = require('passport');
+
 //configure env variables
 require('dotenv').config();
-const test_var = process.env.TEST_VAR || 'NO ENV DETECTED';
-const port = process.env.SERVERPORT || 443;
+require('./passport.js');
 
-//connect to database - needs to be after dotenv to properly load env
+const port = process.env.SERVERPORT || 443;
 const { Users, Sessions, Repos } = require('../database');
 
-//configure Github Authentication Strategy
-
-passport.serializeUser((user, done) => {
-  done(null, user);
-})
-passport.deserializeUser((user, done) => {
-  done(null, user);
-})
-passport.use(new GitHubStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: `${process.env.CLIENT_CALLBACK}/login/callback`
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    const { id, username } = profile;
-    Users.findOrCreate(id, username)
-    .then((results) => {
-      return Sessions.createSession(id, accessToken);
-    })
-    .catch((err) => {
-      console.error('Error in findOrCreate User: ', err);
-      cb(err);
-    })
-    .catch((err) => {
-      console.error('Error in loggin User session: ', err);
-    })
-    return cb(null , {profile, accessToken});
-  }
-))
 
 app.use(express.static('dist'));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(cookieParser());
 app.use(morgan('dev'))
-//the keys argument can be any number, but it needs to be secret. 
+
+//the keys argument for cookieSession can be any number, but it needs to be secret. 
 app.use(cookieSession({
   name: 'session',
   keys: [process.env.COOKIE_SESSION]
 }))
+
+
+//--------------------------------------------
+// AUTH ENDPOINTS
+//--------------------------------------------
 
 app.get('/login', passport.authenticate('github'));
 
@@ -70,8 +46,15 @@ app.get('/login/callback', passport.authenticate('github', { failureRedirect: '/
   res.redirect('/');
 });
 
+//---------------------------------------------
+// API ENDPOINTS
+//---------------------------------------------
+
 app.get('/users/repos', function(req, res) {
-  if (req.session.token) {
+  if (!req.session.token) {
+    res.json({username: undefined, repos: undefined});
+  }
+  else {
     Sessions.getSession(req.session.token)
     .then((user) => {
       const username = user.rows[0].name;
@@ -79,7 +62,7 @@ app.get('/users/repos', function(req, res) {
       return Repos.getRepos(id, username);
     })
     .then((results) => {
-      const { username }  = results
+      const { username }  = results;
       const repos = results.rows;
       if (!repos.length) {
         return res.send({username, repos: []});
@@ -89,6 +72,7 @@ app.get('/users/repos', function(req, res) {
       let promiseArray = repos.map((repo) => {
         return axios.get(`https://api.github.com/repos/${repo.organization}/${repo.repo}/commits`, headers)
       })
+
       Promise.all(promiseArray)
         .then((apiResults) => {
           const commits = apiResults.map(result => result.data);
@@ -97,13 +81,12 @@ app.get('/users/repos', function(req, res) {
         .catch((apiErr) => {
           console.error('Error in GitHub API call: ', apiErr);
         })
+
     })
     .catch((err) => {
       console.error('Error in get repos: ', err);
       res.send();
     })
-  } else {
-    res.json({username: undefined, repos: undefined});
   }
 })
 
@@ -111,26 +94,27 @@ app.post('/users/repos', function(req, res) {
   const { organization, repository } = req.body;
   const headers = { headers: { "Authorization": `token ${req.session.token}`}}
   
-  if (req.session.token) {
-    Sessions.getSession(req.session.token)
-    .then((userResults) => {
-      const user_id = userResults.rows[0].id;
-      return Repos.createRepo(user_id, organization, repository);
-    })
-    .then(() => {
-      return axios.get(`https://api.github.com/repos/${organization}/${repository}/commits`, headers)
-    })
-    .then((results) => {
-      res.status(201);
-      res.json(results.data);
-      
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-  } else {
+  if (!req.session.token) {
     res.status(201);
     res.send();
+  }
+  else {
+    Sessions.getSession(req.session.token)
+      .then((userResults) => {
+        const user_id = userResults.rows[0].id;
+        return Repos.createRepo(user_id, organization, repository);
+      })
+      .then(() => {
+        return axios.get(`https://api.github.com/repos/${organization}/${repository}/commits`, headers)
+      })
+      .then((results) => {
+        res.status(201);
+        res.json(results.data);
+        
+      })
+      .catch((err) => {
+        console.error(err);
+      })
   }
 });
 
@@ -152,7 +136,10 @@ app.post('/users/repos/demo', function(req, res) {
 
 app.delete('/user/repos', (req, res) => {
   const { organization, repository } = req.body;
-  if (req.session.token) {
+  if (!req.session.token) {
+    res.sendStatus(200);
+  }
+ else {
     Sessions.getSession(req.session.token)
     .then((results) => {
       const user_id = results.rows[0].id;
@@ -165,8 +152,6 @@ app.delete('/user/repos', (req, res) => {
       console.error(err);
       res.send();
     })
-  } else {
-    res.sendStatus(200);
   }
 })
 
