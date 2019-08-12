@@ -27,7 +27,11 @@ The build requires a Client_ID and Client_Secret from Github.com to use its auth
 https://developer.github.com/v3/guides/basics-of-authentication/#registering-your-app
 The process should only take a few minutes.
 
-Make a copy of the .example.env file and rename it to .env. From there, enter in your client id & secret, your database information.
+Make a copy of the .example.env file and rename it to .env. From there, enter in your ***CLIENT_ID*** & ***CLIENT_SECRET***, as well as your database information. Please note that this project uses PostgreSQL. Finally, enter in your desired port number in the ***SERVER_PORT*** variable. If you would like to use the Docker Compose functionality of this app, please note you will also need to update this file with your desired port as well:
+
+```
+ /nginx/default.conf:2
+```
 
 For the ***COOKIE_SESSION*** variable, enter a random integer
 
