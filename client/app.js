@@ -89,7 +89,7 @@ class App extends Component {
       })
   }
   handleDemoRemoveRepo(arrIndex) {
-d    const repos = this.state.repos.slice();
+    const repos = this.state.repos.slice();
 
     repos.splice(arrIndex, 1);
     this.setState({repos});
