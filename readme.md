@@ -1,5 +1,4 @@
 # Welcome to CommitSpy! 
-[![Build Status](https://travis-ci.com/jarrmill/commit_spy.svg?branch=master)](https://travis-ci.com/jarrmill/commit_spy)
 
 CommitSpy is a service built for programmers who want to monitor the commit history of many git repositories. Specifically, the project is designed to help in technical teaching institutions, where students rapidly commit and add new github repositories.
 
