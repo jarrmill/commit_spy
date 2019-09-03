@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RepoInputContainer, SearchContainer, Submit, Input } from './styles';
+import { RepoInputContainer, SearchContainer, Input, Title } from './styles';
 class RepoInput extends Component {
   constructor(props) {
     super(props);
@@ -10,6 +10,7 @@ class RepoInput extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onLimitChange = this.onLimitChange.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
   }
   cleanUrl(url) {
     //Split by .com so we don't have to worry about whether the user put https:// or not
@@ -25,6 +26,13 @@ class RepoInput extends Component {
   }
   onChange(e) {
     this.setState({url: e.target.value});
+  }
+
+  onKeyUp(e) {
+    console.log('Key pressed: ', e.key);
+    if (e.keyCode === 13 || e.key === "Enter") {
+      this.onSubmit(e);
+    }
   }
   
   onSubmit(e) {
@@ -43,15 +51,16 @@ class RepoInput extends Component {
     const { url } = this.state;
     return (
       <RepoInputContainer>
-            <div>
-              <label>Add a Repository by Url:</label>
-            </div>
+          <Title>
+            <label>Add a Repository by Url:</label>
+          </Title>
         <SearchContainer>
             <Input type="text"
                   placeholder="Paste the URL of the Repo you want to follow"
                   value={url}
-                  onChange={(e) => this.onChange(e)}></Input>
-          <Submit onClick={(e) => this.onSubmit(e)}>Add</Submit>
+                  onChange={this.onChange}
+                  onKeyUp={this.onKeyUp}>
+            </Input>
         </SearchContainer>
         <form>
           <label>

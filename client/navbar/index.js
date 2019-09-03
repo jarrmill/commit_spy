@@ -1,29 +1,29 @@
 import React from 'react'
-import { Navbar, NavbarBrand, NavItem, NavLink } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBinoculars } from '@fortawesome/free-solid-svg-icons'
+import { Navbar, Greeting, Left, Logo } from './styles';
 
 const NavBar = props => {
   const { view, username } = props;
   const isUserLoggedIn = (username !== '');
   const user_message = (isUserLoggedIn) ? `Welcome, ${username}` : '';
-  const usernameStyle = {
-    height: "100%",
-    paddingTop: "8px",
-  }
   if(isUserLoggedIn && view === 'main') {
     return (
-      <Navbar data-testid="navbar" color="light" light expand="md">
-        <NavbarBrand href="/">Commit Spy</NavbarBrand>
-        <h6 style={usernameStyle}>{user_message}</h6>
-        <NavLink href="/logout">Log Out</NavLink>
+      <Navbar data-testid="navbar">
+        <Left>
+          <Logo href="/"><FontAwesomeIcon icon={faBinoculars} style={{marginRight: '5px'}}/>Commit Spy</Logo>
+          <Greeting>{user_message}</Greeting>
+        </Left>
+        <Logo href="/logout">Log Out</Logo>
       </Navbar>
       )
     }
   else {
       return (
         <Navbar data-testid="navbar" color="light">
-          <NavbarBrand href="/">Commit Spy</NavbarBrand>
-          <NavLink href="/login">Log In</NavLink>
+          <Logo href="/"><FontAwesomeIcon icon={faBinoculars} style={{marginRight: '5px'}}/>Commit Spy</Logo>
+          <Logo href="/login">Log In</Logo>
         </Navbar>
         ) 
     }

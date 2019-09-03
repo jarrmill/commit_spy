@@ -122,7 +122,7 @@ class App extends Component {
       case "main":
         return ( doesUserHaveRepos ) ? (
           <div style={{display: "flex"}}>
-            <SidebarContainer style={{backgroundColor: '#ddd', flex: 1}}>
+            <SidebarContainer style={{flex: 1}}>
               <Sidebar repos={this.state.repos} handleRemoveRepo={this.handleRemoveRepo}/>
             </SidebarContainer>
             <Main>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Main = styled.div`
-  background-color: white;
+  background-color: #ddd;
   @media (max-width: 1100px) {
     flex: 3;
   }
