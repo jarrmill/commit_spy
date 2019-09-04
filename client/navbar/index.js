@@ -15,15 +15,15 @@ const NavBar = props => {
           <Logo href="/"><FontAwesomeIcon icon={faBinoculars} style={{marginRight: '5px'}}/>Commit Spy</Logo>
           <Greeting>{user_message}</Greeting>
         </Left>
-        <Logo href="/logout">Log Out</Logo>
+        <Logo href="/logout" style={{marginRight: '15px'}}>Log Out</Logo>
       </Navbar>
       )
     }
   else {
       return (
         <Navbar data-testid="navbar" color="light">
-          <Logo href="/"><FontAwesomeIcon icon={faBinoculars} style={{marginRight: '5px'}}/>Commit Spy</Logo>
-          <Logo href="/login">Log In</Logo>
+          <Logo href="/"><FontAwesomeIcon icon={faBinoculars}/>Commit Spy</Logo>
+          <Logo href="/login" style={{marginRight: '15px'}}>Log In</Logo>
         </Navbar>
         ) 
     }

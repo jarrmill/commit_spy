@@ -3,15 +3,11 @@ import styled from "styled-components";
 export const CommitContainer = styled.div`
   background-color: #fafbfc;
   border: 1px solid #ccc;
-  margin: ${props => props.isRepeat ? "0px 5px 0px 5px" : "5px 5px 0px 5px"};
-  border-bottom: ${props => props.isRepeat ? "none" : "none"};
-  border-top: ${props => props.isRepeat ? "none" : "1px solid #ccc"}; 
-
   margin: 0px 10px 0px 10px;
   display: flex;
-  flex-direction: row;
+  align-items: flex-end;
   overflow: hidden;
-  
+  height: 65px;
   :hover {
     background-color: #edf6ff;
   }
@@ -22,25 +18,35 @@ export const CommitContainer = styled.div`
 export const User = styled.div`
   display: flex;
   flex-direction: row;
+  font-weight: 80%;
 `
 export const AvatarContainer = styled.div`
-  margin-right: 10px;
-  width: 30px;
+  margin-right: 5px;
+  width: 20px;
+  display: flex;
+  align-items: center;
 `
 
 export const Avatar = styled.img`
-  height: 30px;
+  height: 20px;
   border-radius: 50%;
 `
 export const HeaderContainer = styled.div`
   padding: 5px;
-  padding-bottom: 0px;
 `
 
 export const BodyContainer = styled.div`
-  flex: 3;
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 5px;
 `
 export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
   flex: 2;
 `
 export const RepoName = styled.div`
@@ -48,6 +54,25 @@ export const RepoName = styled.div`
   margin-top: 20px
   font-size: 18px;
 `
-export const Name = styled.p`
+export const Button = styled.button`
+  color: #1e72d9;
+  border: 1px solid #eee;
+  border-radius: 5%;
+  margin: 5px;
+  width: 100px;
 
+  :hover {
+    border: 1px solid #1e72d9;
+    background-color: #1e72d9;
+    color: white;
+  }
+
+  :focus {
+    outline: none;
+  }
+
+  &:last-child {
+    margin-right: 15px;
+    width: 45px;
+  }
 `
